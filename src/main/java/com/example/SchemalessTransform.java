@@ -32,7 +32,7 @@ public class SchemalessTransform<R extends ConnectRecord<R>> implements Transfor
                 record.kafkaPartition(),
                 record.keySchema(),
                 record.key(),
-                Schema.NONE,
+                null, // value schema is null for schemaless
                 valueMap,
                 record.timestamp()
         );
@@ -48,4 +48,4 @@ public class SchemalessTransform<R extends ConnectRecord<R>> implements Transfor
 
     @Override
     public void configure(Map<String, ?> configs) {}
-}
+} 
