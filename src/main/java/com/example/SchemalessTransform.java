@@ -8,22 +8,23 @@ import org.apache.kafka.common.config.ConfigDef;
 
 import java.util.Map;
 
-@SuppressWarnings("rawtypes")
 public class SchemalessTransform<R extends ConnectRecord<R>> implements Transformation<R> {
 
     @Override
     public R apply(R record) {
-        if (record.value() == null || record.valueSchema() != null) {
-            return record; // Only transform schemaless records
+        Object value = record.value();
+
+        // Handle null record values safely
+        if (value == null) {
+            return record; // Skip processing if value is null
         }
 
-        if (!(record.value() instanceof Map)) {
-            throw new DataException("Expected Map for schemaless data, found: " + record.value().getClass());
+        if (!(value instanceof Map)) {
+            throw new DataException("Expected Map for schemaless data, found: " + value.getClass());
         }
 
-        Map<String, Object> valueMap = (Map<String, Object>) record.value();
-
-        // Example: add a timestamp field
+        @SuppressWarnings("unchecked")
+        Map<String, Object> valueMap = (Map<String, Object>) value;
         valueMap.put("processed_at", System.currentTimeMillis());
 
         return record.newRecord(
@@ -31,7 +32,7 @@ public class SchemalessTransform<R extends ConnectRecord<R>> implements Transfor
                 record.kafkaPartition(),
                 record.keySchema(),
                 record.key(),
-                null, // schemaless
+                Schema.NONE,
                 valueMap,
                 record.timestamp()
         );
@@ -39,12 +40,12 @@ public class SchemalessTransform<R extends ConnectRecord<R>> implements Transfor
 
     @Override
     public ConfigDef config() {
-        return new ConfigDef(); // Add configs here if needed
+        return new ConfigDef();
     }
 
     @Override
-    public void configure(Map<String, ?> configs) {}
+    public void close() {}
 
     @Override
-    public void close() {}
+    public void configure(Map<String, ?> configs) {}
 }
