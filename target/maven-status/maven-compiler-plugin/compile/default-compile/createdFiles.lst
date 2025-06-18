@@ -1,1 +1,1 @@
-com/example/kafka/connect/transforms/SanitizeDecimalFields.class
+com/example/converter/CustomAvroConverter.class

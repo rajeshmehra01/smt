@@ -1,1 +1,1 @@
-/workspaces/smt/src/main/java/com/example/kafka/connect/transforms/SanitizeDecimalFields.java
+/workspaces/smt/src/main/java/com/example/converter/CustomAvroConverter.java
