@@ -19,6 +19,13 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <!-- Kafka Connect API -->
         <dependency>
@@ -41,7 +48,7 @@
             <version>1.11.1</version>
         </dependency>
 
-        <!-- SLF4J (for logging support if needed) -->
+        <!-- Logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -68,23 +75,3 @@
                 <version>3.5.0</version>
                 <executions>
                     <execution>
-                        <phase>package</phase>
-                        <goals><goal>shade</goal></goals>
-                        <configuration>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <finalName>${project.artifactId}-${project.version}-all</finalName>
-                            <relocations>
-                                <!-- avoid classpath conflicts -->
-                                <relocation>
-                                    <pattern>io.confluent</pattern>
-                                    <shadedPattern>shadow.io.confluent</shadedPattern>
-                                </relocation>
-                            </relocations>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-
-</project>
